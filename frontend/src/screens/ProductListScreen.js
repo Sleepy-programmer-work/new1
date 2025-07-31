@@ -77,12 +77,18 @@ export default function ProductListScreen() {
   const { state } = useContext(Store);
   const { userInfo } = state;
 
+  const apiUrl = process.env.REACT_APP_API_URL || "";
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(`/api/products/admin?page=${page} `, {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        });
+        const { data } = await axios.get(
+          `${apiUrl}/api/products/admin?page=${page}`,
+          {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+            withCredentials: true
+          }
+        );
 
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (err) {}
@@ -171,32 +177,38 @@ export default function ProductListScreen() {
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
-                <tr key={product._id}>
-                  <td>{product._id}</td>
-                  <td>{product.name}</td>
-                  <td>{product.price}</td>
-                  <td>{product.category}</td>
-                  <td>{product.brand}</td>
-                  <td>
-                    <Button
-                      type="button"
-                      variant="light"
-                      onClick={() => navigate(`/admin/product/${product._id}`)}
-                    >
-                      Edit
-                    </Button>
-                    &nbsp;
-                    <Button
-                      type="button"
-                      variant="light"
-                      onClick={() => deleteHandler(product)}
-                    >
-                      Delete
-                    </Button>
-                  </td>
+              {Array.isArray(products) && products.length > 0 ? (
+                products.map((product) => (
+                  <tr key={product._id}>
+                    <td>{product._id}</td>
+                    <td>{product.name}</td>
+                    <td>{product.price}</td>
+                    <td>{product.category}</td>
+                    <td>{product.brand}</td>
+                    <td>
+                      <Button
+                        type="button"
+                        variant="light"
+                        onClick={() => navigate(`/admin/product/${product._id}`)}
+                      >
+                        Edit
+                      </Button>
+                      &nbsp;
+                      <Button
+                        type="button"
+                        variant="light"
+                        onClick={() => deleteHandler(product)}
+                      >
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-muted">No products found</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
           <div>

@@ -52,9 +52,14 @@ export default function UserListScreen() {
     const fetchData = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/users`, {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        });
+        const apiUrl = process.env.REACT_APP_API_URL || "";
+        const { data } = await axios.get(
+          `${apiUrl}/api/users`,
+          {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+            withCredentials: true
+          }
+        );
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (err) {
         dispatch({
@@ -111,31 +116,37 @@ export default function UserListScreen() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
-              <tr key={user._id}>
-                <td>{user._id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.isAdmin ? 'YES' : 'NO'}</td>
-                <td>
-                  <Button
-                    type="button"
-                    variant="light"
-                    onClick={() => navigate(`/admin/user/${user._id}`)}
-                  >
-                    Edit
-                  </Button>
-                  &nbsp;
-                  <Button
-                    type="button"
-                    variant="light"
-                    onClick={() => deleteHandler(user)}
-                  >
-                    Delete
-                  </Button>
-                </td>
+            {Array.isArray(users) && users.length > 0 ? (
+              users.map((user) => (
+                <tr key={user._id}>
+                  <td>{user._id}</td>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.isAdmin ? 'YES' : 'NO'}</td>
+                  <td>
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => navigate(`/admin/user/${user._id}`)}
+                    >
+                      Edit
+                    </Button>
+                    &nbsp;
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => deleteHandler(user)}
+                    >
+                      Delete
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="text-muted">No users found</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       )}

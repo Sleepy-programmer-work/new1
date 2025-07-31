@@ -100,7 +100,7 @@ export default function DashboardScreen() {
           </Row>
           <div className="my-3">
             <h2>Sales</h2>
-            {summary.dailyOrders.length === 0 ? (
+            {Array.isArray(summary && summary.dailyOrders) && summary.dailyOrders.length === 0 ? (
               <MessageBox>No Sale</MessageBox>
             ) : (
               <Chart
@@ -110,14 +110,14 @@ export default function DashboardScreen() {
                 loader={<div>Loading Chart...</div>}
                 data={[
                   ['Date', 'Sales'],
-                  ...summary.dailyOrders.map((x) => [x._id, x.sales]),
+                  ...(Array.isArray(summary && summary.dailyOrders) ? summary.dailyOrders.map((x) => [x._id, x.sales]) : [])
                 ]}
               ></Chart>
             )}
           </div>
           <div className="my-3">
             <h2>Categories</h2>
-            {summary.productCategories.length === 0 ? (
+            {Array.isArray(summary && summary.productCategories) && summary.productCategories.length === 0 ? (
               <MessageBox>No Category</MessageBox>
             ) : (
               <Chart
@@ -127,7 +127,7 @@ export default function DashboardScreen() {
                 loader={<div>Loading Chart...</div>}
                 data={[
                   ['Category', 'Products'],
-                  ...summary.productCategories.map((x) => [x._id, x.count]),
+                  ...(Array.isArray(summary && summary.productCategories) ? summary.productCategories.map((x) => [x._id, x.count]) : [])
                 ]}
               ></Chart>
             )}
