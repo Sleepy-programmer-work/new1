@@ -23,10 +23,15 @@ export default function SigninScreen() {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await Axios.post('/api/users/signin', {
-        email,
-        password,
-      });
+      const apiUrl = process.env.REACT_APP_API_URL || "";
+      const { data } = await Axios.post(
+        `${apiUrl}/api/users/signin`,
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
       ctxDispatch({ type: 'USER_SIGNIN', payload: data });
       localStorage.setItem('userInfo', JSON.stringify(data));
       navigate(redirect || '/');
