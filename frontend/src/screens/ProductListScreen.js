@@ -106,10 +106,11 @@ export default function ProductListScreen() {
       try {
         dispatch({ type: 'CREATE_REQUEST' });
         const { data } = await axios.post(
-          '/api/products',
+          `${apiUrl}/api/products`,
           {},
           {
             headers: { Authorization: `Bearer ${userInfo.token}` },
+            withCredentials: true
           }
         );
         toast.success('product created successfully');
@@ -127,8 +128,9 @@ export default function ProductListScreen() {
   const deleteHandler = async (product) => {
     if (window.confirm('Are you sure to delete?')) {
       try {
-        await axios.delete(`/api/products/${product._id}`, {
+        await axios.delete(`${apiUrl}/api/products/${product._id}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
+          withCredentials: true
         });
         toast.success('product deleted successfully');
         dispatch({ type: 'DELETE_SUCCESS' });

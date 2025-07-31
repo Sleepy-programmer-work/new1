@@ -148,7 +148,7 @@ function ProductScreen() {
             <ListGroup.Item>Pirce : ${product.price}</ListGroup.Item>
             <ListGroup.Item>
               <Row xs={1} md={2} className="g-2">
-                {[product.image, ...product.images].map((x) => (
+                {[product.image, ...(Array.isArray(product.images) ? product.images : [])].map((x) => (
                   <Col key={x}>
                     <Card>
                       <Button

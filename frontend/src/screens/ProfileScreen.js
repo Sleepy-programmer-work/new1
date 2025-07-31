@@ -36,8 +36,9 @@ export default function ProfileScreen() {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      const apiUrl = process.env.REACT_APP_API_URL || "";
       const { data } = await axios.put(
-        '/api/users/profile',
+        `${apiUrl}/api/users/profile`,
         {
           name,
           email,
@@ -45,6 +46,7 @@ export default function ProfileScreen() {
         },
         {
           headers: { Authorization: `Bearer ${userInfo.token}` },
+          withCredentials: true
         }
       );
       dispatch({
