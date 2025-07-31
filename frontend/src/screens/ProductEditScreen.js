@@ -206,9 +206,9 @@ export default function ProductEditScreen() {
 
           <Form.Group className="mb-3" controlId="additionalImage">
             <Form.Label>Additional Images</Form.Label>
-            {images.length === 0 && <MessageBox>No image</MessageBox>}
+            {Array.isArray(images) && images.length === 0 && <MessageBox>No image</MessageBox>}
             <ListGroup variant="flush">
-              {images.map((x) => (
+              {Array.isArray(images) && images.map((x) => (
                 <ListGroup.Item key={x}>
                   {x}
                   <Button variant="light" onClick={() => deleteFileHandler(x)}>

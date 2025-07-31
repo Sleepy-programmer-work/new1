@@ -147,7 +147,7 @@ export default function SearchScreen() {
                   Any
                 </Link>
               </li>
-              {categories.map((c) => (
+              {Array.isArray(categories) && categories.map((c) => (
                 <li key={c}>
                   <Link
                     className={c === category ? 'text-bold' : ''}

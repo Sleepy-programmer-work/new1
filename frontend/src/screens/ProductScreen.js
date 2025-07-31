@@ -210,12 +210,12 @@ function ProductScreen() {
       <div className="my-3">
         <h2 ref={reviewsRef}>Reviews</h2>
         <div className="mb-3">
-          {product.reviews.length === 0 && (
+          {Array.isArray(product.reviews) && product.reviews.length === 0 && (
             <MessageBox>There is no review</MessageBox>
           )}
         </div>
         <ListGroup>
-          {product.reviews.map((review) => (
+          {Array.isArray(product.reviews) && product.reviews.map((review) => (
             <ListGroup.Item key={review._id}>
               <strong>{review.name}</strong>
               <Rating rating={review.rating} caption=" "></Rating>

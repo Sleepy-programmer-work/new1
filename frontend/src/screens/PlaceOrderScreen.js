@@ -44,12 +44,14 @@ export default function PlaceOrderScreen() {
   cart.taxPrice = round2(0.15 * cart.itemsPrice);
   cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
 
+  const apiUrl = process.env.REACT_APP_API_URL || "";
+
   const placeOrderHandler = async () => {
     try {
       dispatch({ type: 'CREATE_REQUEST' });
 
       const { data } = await Axios.post(
-        '/api/orders',
+        `${apiUrl}/api/orders`,
         {
           orderItems: cart.cartItems,
           shippingAddress: cart.shippingAddress,
@@ -63,6 +65,7 @@ export default function PlaceOrderScreen() {
           headers: {
             authorization: `Bearer ${userInfo.token}`,
           },
+          withCredentials: true
         }
       );
       ctxDispatch({ type: 'CART_CLEAR' });
